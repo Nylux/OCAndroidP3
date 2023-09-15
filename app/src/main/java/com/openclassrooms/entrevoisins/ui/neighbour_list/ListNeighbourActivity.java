@@ -13,6 +13,7 @@ import android.widget.Button;
 import com.openclassrooms.entrevoisins.R;
 import com.openclassrooms.entrevoisins.events.StartDetailsActivityEvent;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
@@ -36,12 +37,19 @@ public class ListNeighbourActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_neighbour);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
 
         setSupportActionBar(mToolbar);
         mPagerAdapter = new ListNeighbourPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mPagerAdapter);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
         mTabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @OnClick(R.id.add_neighbour)
@@ -51,7 +59,6 @@ public class ListNeighbourActivity extends AppCompatActivity {
 
     @Subscribe
     public void onStartDetailsActivity(StartDetailsActivityEvent event){
-        //TODO: Start activity and pass neighbour (event.neighbour)
         Intent intent = new Intent(this, DetailsActivity.class);
         intent.putExtra("neighbour", event.neighbour);
         startActivity(intent);
