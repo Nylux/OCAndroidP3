@@ -160,6 +160,7 @@
                 android:background="#20808080" />
 
             <TextView
+                android:id="@+id/aboutme_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/aboutme_textview"
