@@ -7,16 +7,22 @@ import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.EventLog;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.openclassrooms.entrevoisins.R;
+import com.openclassrooms.entrevoisins.events.AddFavoriteEvent;
+import com.openclassrooms.entrevoisins.events.RemoveFavoriteEvent;
 import com.openclassrooms.entrevoisins.model.Neighbour;
 
+import org.greenrobot.eventbus.EventBus;
 import org.w3c.dom.Text;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class DetailsActivity extends AppCompatActivity {
 
@@ -48,7 +54,7 @@ public class DetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         neighbour = (Neighbour) intent.getSerializableExtra("neighbour");
 
-        Log.i("Entrevoisins", neighbour.getName()); // TODO: Remove debug log
+        ButterKnife.bind(this);
 
         /*
         // details_imageview.setImageResource(neighbour.getAvatarUrl()); // TODO: Find a way to set the image ?
@@ -57,6 +63,24 @@ public class DetailsActivity extends AppCompatActivity {
         phone_textview.setText((neighbour.getPhoneNumber()));
         //social_textview.setText(neighbour.); // TODO: Extend Neighbour object to have a social field
         aboutme_description.setText(neighbour.getAboutMe());
-        */
+         */
+
+    }
+
+    @OnClick(R.id.details_fab)
+    public void toggleFavorite(){
+        if (neighbour.isFavorite() == true)
+        {
+            EventBus.getDefault().post(new RemoveFavoriteEvent(neighbour));
+            fab.setImageResource(R.drawable.ic_star_border_white_24dp);
+            Log.d("Entrevoisins", "EVENT REMOVE FAVORITE FIRED");
+        }
+        else
+        {
+            EventBus.getDefault().post(new AddFavoriteEvent(neighbour));
+            fab.setImageResource(R.drawable.ic_star_yellow_24dp);
+            Log.d("Entrevoisins", "EVENT ADD FAVORITE FIRED");
+            Log.d("Entrevoisins", neighbour.getName());
+        }
     }
 }
