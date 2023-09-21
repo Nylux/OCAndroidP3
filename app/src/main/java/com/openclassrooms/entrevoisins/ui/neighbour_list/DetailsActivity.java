@@ -18,6 +18,7 @@ import com.openclassrooms.entrevoisins.events.RemoveFavoriteEvent;
 import com.openclassrooms.entrevoisins.model.Neighbour;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.w3c.dom.Text;
 
 import butterknife.BindView;
