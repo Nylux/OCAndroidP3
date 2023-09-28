@@ -9,13 +9,16 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.EventLog;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.openclassrooms.entrevoisins.R;
+import com.openclassrooms.entrevoisins.di.DI;
 import com.openclassrooms.entrevoisins.events.AddFavoriteEvent;
 import com.openclassrooms.entrevoisins.events.RemoveFavoriteEvent;
 import com.openclassrooms.entrevoisins.model.Neighbour;
+import com.openclassrooms.entrevoisins.service.NeighbourApiService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -45,6 +48,7 @@ public class DetailsActivity extends AppCompatActivity {
 
 
     Neighbour neighbour;
+    private NeighbourApiService mApiService;
 
 
     @Override
@@ -52,36 +56,54 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
+        ButterKnife.bind(this);
+
         Intent intent = getIntent();
         neighbour = (Neighbour) intent.getSerializableExtra("neighbour");
 
-        ButterKnife.bind(this);
+        mApiService = DI.getNeighbourApiService();
 
-        /*
+
         // details_imageview.setImageResource(neighbour.getAvatarUrl()); // TODO: Find a way to set the image ?
         neighbour_name_textview.setText(neighbour.getName());
         location_textview.setText(neighbour.getAddress());
         phone_textview.setText((neighbour.getPhoneNumber()));
         //social_textview.setText(neighbour.); // TODO: Extend Neighbour object to have a social field
         aboutme_description.setText(neighbour.getAboutMe());
-         */
+
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (neighbour.isFavorite())
+                {
+                    EventBus.getDefault().post(new RemoveFavoriteEvent(neighbour));
+                    fab.setImageResource(R.drawable.ic_star_border_white_24dp);
+                }
+                else
+                {
+                    EventBus.getDefault().post(new AddFavoriteEvent(neighbour));
+                    fab.setImageResource(R.drawable.ic_star_yellow_24dp);
+                }
+            }
+        });
 
     }
 
-    @OnClick(R.id.details_fab)
-    public void toggleFavorite(){
-        if (neighbour.isFavorite() == true)
-        {
-            EventBus.getDefault().post(new RemoveFavoriteEvent(neighbour));
-            fab.setImageResource(R.drawable.ic_star_border_white_24dp);
-            Log.d("Entrevoisins", "EVENT REMOVE FAVORITE FIRED");
-        }
-        else
-        {
-            EventBus.getDefault().post(new AddFavoriteEvent(neighbour));
-            fab.setImageResource(R.drawable.ic_star_yellow_24dp);
-            Log.d("Entrevoisins", "EVENT ADD FAVORITE FIRED");
-            Log.d("Entrevoisins", neighbour.getName());
-        }
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void onAddFavorite(AddFavoriteEvent event) {
+        mApiService.addFavoriteNeighbour(event.neighbour);
+        neighbour.setFavorite(!neighbour.isFavorite());
     }
 }

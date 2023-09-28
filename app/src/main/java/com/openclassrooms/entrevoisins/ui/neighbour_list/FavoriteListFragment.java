@@ -83,11 +83,4 @@ public class FavoriteListFragment extends Fragment {
         mApiService.deleteFavoriteNeighbour(event.neighbour);
         initList();
     }
-
-    @Subscribe
-    public void onAddFavorite(AddFavoriteEvent event) {
-        mApiService.addFavoriteNeighbour(event.neighbour);
-        initList();
-        Log.d("osef", "ADD FAVORITE EVENT RECEIVED");
-    }
 }

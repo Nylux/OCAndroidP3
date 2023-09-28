@@ -56,7 +56,11 @@ public class DummyNeighbourApiService implements  NeighbourApiService {
      */
     @Override
     public void addFavoriteNeighbour(Neighbour neighbour) {
-        neighbour.setFavorite(true);
+        for (Neighbour n : neighbours)
+        {
+            if (n.equals(neighbour))
+                n.setFavorite(true);
+        }
     }
 
     /**
@@ -64,6 +68,10 @@ public class DummyNeighbourApiService implements  NeighbourApiService {
      */
     @Override
     public void deleteFavoriteNeighbour(Neighbour neighbour) {
-        neighbour.setFavorite(false);
+        for (Neighbour n : neighbours)
+        {
+            if (n.equals(neighbour))
+                n.setFavorite(false);
+        }
     }
 }
