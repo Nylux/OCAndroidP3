@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.openclassrooms.entrevoisins.R;
 import com.openclassrooms.entrevoisins.di.DI;
 import com.openclassrooms.entrevoisins.events.AddFavoriteEvent;
@@ -63,8 +64,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         mApiService = DI.getNeighbourApiService();
 
-
-        // details_imageview.setImageResource(neighbour.getAvatarUrl()); // TODO: Find a way to set the image ?
+        Glide.with(this).load(neighbour.getAvatarUrl()).centerCrop().into(details_imageview);
         neighbour_name_textview.setText(neighbour.getName());
         location_textview.setText(neighbour.getAddress());
         phone_textview.setText((neighbour.getPhoneNumber()));
