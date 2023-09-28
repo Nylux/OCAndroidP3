@@ -68,7 +68,7 @@ public class DetailsActivity extends AppCompatActivity {
         neighbour_name_textview.setText(neighbour.getName());
         location_textview.setText(neighbour.getAddress());
         phone_textview.setText((neighbour.getPhoneNumber()));
-        //social_textview.setText(neighbour.); // TODO: Extend Neighbour object to have a social field
+        social_textview.setText(neighbour.getSocial());
         aboutme_description.setText(neighbour.getAboutMe());
 
 

@@ -14,10 +14,11 @@ public class Neighbour implements Serializable {
     private String address;
     private String phoneNumber;
     private String aboutMe;
-
     private boolean isFavorite;
+    private String social;
 
-     /** Constructor */
+
+    /** Constructor */
     public Neighbour(long id, String name, String avatarUrl, String address,
                      String phoneNumber, String aboutMe) {
         this.id = id;
@@ -27,10 +28,15 @@ public class Neighbour implements Serializable {
         this.phoneNumber = phoneNumber;
         this.aboutMe = aboutMe;
         this.isFavorite = false;
+        this.social = "Non renseigné";
     }
 
 
     /** Methods */
+
+    public String getSocial() { return social; }
+
+    public void setSocial(String social) { this.social = social; }
 
     public boolean isFavorite() {
         return isFavorite;
