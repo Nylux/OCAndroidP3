@@ -64,12 +64,16 @@ public class DetailsActivity extends AppCompatActivity {
 
         mApiService = DI.getNeighbourApiService();
 
-        Glide.with(this).load(neighbour.getAvatarUrl()).centerCrop().into(details_imageview);
+        Glide.with(this).load(neighbour.getAvatarUrl()).into(details_imageview);
         neighbour_name_textview.setText(neighbour.getName());
         location_textview.setText(neighbour.getAddress());
         phone_textview.setText((neighbour.getPhoneNumber()));
         social_textview.setText(neighbour.getSocial());
         aboutme_description.setText(neighbour.getAboutMe());
+        if (neighbour.isFavorite())
+            fab.setImageResource(R.drawable.ic_star_yellow_24dp);
+        else
+            fab.setImageResource(R.drawable.ic_star_border_white_24dp);
 
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +108,12 @@ public class DetailsActivity extends AppCompatActivity {
     @Subscribe
     public void onAddFavorite(AddFavoriteEvent event) {
         mApiService.addFavoriteNeighbour(event.neighbour);
+        neighbour.setFavorite(!neighbour.isFavorite());
+    }
+
+    @Subscribe
+    public void onRemoveFavorite(RemoveFavoriteEvent event){
+        mApiService.deleteFavoriteNeighbour(event.neighbour);
         neighbour.setFavorite(!neighbour.isFavorite());
     }
 }
